@@ -1,0 +1,13 @@
+{% extends 'core/index.html' %}
+
+
+{% block register %}
+
+    <form action="POST">
+        {% csrf_token %}
+        {{  form.as_p }}
+    </form>
+
+{% endblock register %}
+
+
