@@ -22,14 +22,14 @@ class HomeView(FormView):
 
     template_name = "core/index.html"
     form_class = LogForm
-    success_url = reverse_lazy("core : home")
+    success_url = reverse_lazy("core : index")
 
 class RegistrationView(CreateView):
     template_name = "core/register.html"
     form_class = UserCreationForm
-    success_url = reverse_lazy("core : home")
+    success_url = reverse_lazy("core : index")
 
-class loginPage(View):
+class LoginView(View):
     form_class = forms.LoginForm
     template_name = 'core/signin.html'
 

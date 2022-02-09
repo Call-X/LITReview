@@ -5,15 +5,12 @@
 	<meta charset="utf-8">
 	<meta name="viewport"    content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="">
-	<meta name="author"      content="Sergey Pozhilov (GetTemplate.com)">
-	
-	<title>Progressus - Free business bootstrap template by GetTemplate</title>
 
 <!-- 	<link rel="shortcut icon" href="static/css/assets/logo.png"> -->
 	
 	<link rel="stylesheet" media="screen" href="static/css/assets/background.jpg">
 	<link rel="stylesheet" href="static/css/bootstrap.min.css">
-	<link rel="stylesheet" href="static/css/font-awesome.min.css">
+
 
 	<!-- Custom styles for our template -->
 	<link rel="stylesheet" href="static/css/bootstrap-theme.css" media="screen" >
@@ -27,11 +24,11 @@
 			<div class="navbar-header">
 				<!-- Button for smallest screens -->
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-				<a class="navbar-brand" href="index.html"><img src="static/css/assets/logo.png" alt="Progressus HTML5 template"></a>
+				<a class="navbar-brand" href="index.html"><img src="static/css/assets/logo.png" alt=""></a>
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav pull-right">
-					<li class="active"><a href="#">HOME</a></li>
+					<li class="active"><a href="">HOME</a></li>
 					<li><a href="Flux.html">FLUX</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">POST <b class="caret"></b></a>
@@ -40,8 +37,8 @@
 							<li class="active"><a href="sidebar-right.html">Right Sidebar</a></li>
 						</ul>
 					</li>
-					<li><a href="register.html">REGISTRATION</a></li>
-					<li><a class="btn" href="signin.html">SIGN IN / SIGN OUT</a></li>
+					<li><a href="register">REGISTRATION</a></li>
+					<li><a class="btn" href="signin">SIGN IN / SIGN OUT</a></li>
 				</ul>
 			</div><!--/.nav-collapse -->
 		</div>
@@ -54,9 +51,11 @@
 			<div class="row">
 				<h1 class="lead">WELCOME ON LITReview </h1>
 				<div class="box">
-					{% block signin %}{% endblock signin %}
-					
+					{% block signin %}{% endblock %}
+					{% block register %}{% endblock register %}
 				</div>
+			</div>
+		</div>
 				
 	</header>
 	<!-- /Header -->
@@ -100,13 +99,8 @@
 						</div>
 					</div>
 
-					<div class="col-md-6 widget">
-						<div class="widget-body">
-							<p class="text-right">
-								Copyright &copy; 2014, Your name. Designed by <a href="http://gettemplate.com/" rel="designer">gettemplate</a> 
-							</p>
-						</div>
-					</div>
+					
+					
 
 				</div> <!-- /row of widgets -->
 			</div>
