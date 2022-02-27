@@ -1,17 +1,23 @@
+from xml.etree.ElementTree import Comment
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.conf import settings
 from django.db import models
 
 
+
 class Ticket(models.Model):
-    type = 'ticket'
-    name = models.CharField(max_length=128, unique=True)
+    title = models.CharField(max_length=128, unique=True)
     description = models.TextField(max_length=2048, blank=True)
     time_created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
         to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='images/', null=True, blank=True)
     completed = models.BooleanField(default=False)
+
+    def ___str___(self):
+        return self.title
+
+   
 
 
 class Review(models.Model):
@@ -25,16 +31,11 @@ class Review(models.Model):
         to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     time_created = models.DateTimeField(auto_now_add=True)
 
+    def ___str___(self):
+        return self.headline
 
-""" class UserFollows(models.Model):
-    class Meta:
-        model = UserFollows
-        fields = ['user', 'followed_user']
-        labels = {'followed_user': 'Utilisateur à suivre :'}
-        exclude = ['user']
-        widgets = {'followed_user': forms.TextInput}
+    @classmethod
+    def get_rating_range(cls):
+        return range(5)
 
-    class Meta:
-        # ensures we don't get multiple UserFollows instances
-        # for unique user-user_followed pairs
-        unique_together = ('user', 'followed_user', ) """
+

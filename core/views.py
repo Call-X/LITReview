@@ -1,35 +1,29 @@
-from email import message
-from turtle import home
-from django.contrib.auth import login, authenticate, logout
-from re import template
-from sre_constants import SUCCESS
+from django.contrib.auth import login, authenticate
 
-from . import forms
-from .forms import LogForm, UserCreationForm
+from .forms import LoginForm, UserCreationForm
 from django.shortcuts import redirect, render
-from datetime import datetime
 from django.views.generic.edit import FormView, CreateView
+""" from django.contrib.auth.views import LoginView, LogoutView """
 from django.views.generic import View
-
-
 from django.urls import reverse_lazy
-
+""" from django.contrib.auth.mixins import LoginRequiredMixin """
 from core import forms
 
 
 class HomeView(FormView):
     
 
-    template_name = "core/index.html"
-    form_class = LogForm
-    success_url = reverse_lazy("core : index")
+    template_name = "core/base.html"
+    form_class = LoginForm
+    success_url = reverse_lazy("home")
+
 
 class RegistrationView(CreateView):
     template_name = "core/register.html"
     form_class = UserCreationForm
-    success_url = reverse_lazy("core : index")
+    success_url = reverse_lazy("home")
 
-class LoginView(View):
+class LoginView( View):
     form_class = forms.LoginForm
     template_name = 'core/signin.html'
 
@@ -51,3 +45,6 @@ class LoginView(View):
                     return redirect('home')
             message = 'Identification invalid.'
             return render(request, self.template_name, context={'form' : form, 'message' : message})
+
+class LogoutView(View):
+    template_name = 'core/base.html'
