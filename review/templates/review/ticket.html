@@ -1,0 +1,16 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h2 class="sublead"> Create Your Ticket</h2>
+{% endblock  %}
+
+{% block ticket %}
+
+    <form method="POST">
+        {% csrf_token %}
+        {{  form|crispy }}
+        <button type="submit" class="btn btn-primary">Send</button>
+    </form>
+
+{% endblock  %}

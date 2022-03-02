@@ -1,0 +1,53 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="subscriber">
+    <h3>Follow other users</h3>
+    <form method="post" action="{% url 'subscription' %}">
+        {% csrf_token %}
+
+        <div class="select_subscriber">    
+            <select class="form-select" name="followed_user">
+                <option value="" selected>Select A User</option>
+                {% for user in follow_list %}
+                <option value="{{ user.id }}">{{ user.username}}</option>
+                {% endfor %}
+            </select>            
+        </div>
+        <div class="submit">
+            <button type="submit" class="btn btn-primary"> Send </button>
+        </div>    
+    
+    </form>
+</div>
+
+<div class="subscription">   
+    <h3>Subscriptions</h3>            
+    {% if followers %}
+        {% for follows_user in followers %}
+        
+        <div class="list"><li class="user_list">{{ follows_user.username }}</li></div>
+            <form method="post" action="{% url 'subscription' %}">
+            {% csrf_token %}
+                <button type="submit" class="btn btn-primary" name="delete" value="{{ follows_user.id }}">Delete</button>
+            </form>
+        </div>
+        {% endfor %}
+    {% else %}
+        <li>You don't folow any User</li>
+    {% endif %}
+</div>
+
+<div class="mb-4">
+    <h3>Subscriber</h3>
+    {% if followed_by %}
+        {% for followed_by_user in followed_by %}
+        <li>{{ followed_by_user.username }}</li>
+        {% endfor %}
+    {% else %}
+        <li>No followers Follow you.</li>
+    {% endif %}                
+</div>
+
+{% endblock %}

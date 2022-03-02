@@ -1,0 +1,42 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+
+
+
+{% block content %}
+<h2 class="sublead"> SEE YOUR FEEDS </h2>
+<a href="{% url 'create_ticket' %}" class="btn btn-primary">Ask for a Review</a>
+<a href="{% url 'create_review' %}"class="btn btn-primary">Create a Review</a>
+{% endblock  %}
+
+{% block ticket %}
+    
+
+    {% for ticket in tickets %}
+    <article>
+        {{ticket.title}}
+        {{ticket.is_closed}}
+        <a href="{% url 'add_review' id_ticket=ticket.id %}">Ticket Access</a>
+
+    </article>
+    {% empty %}
+    
+    <p>No ticket</p>
+
+    {% endfor %}
+
+    {% for review in reviews %}
+    <article>
+        {{review.title}}
+        
+
+    </article>
+    {% empty %}
+    
+    <p>No review</p>
+
+    {% endfor %}
+{% endblock  %}
+
+
+

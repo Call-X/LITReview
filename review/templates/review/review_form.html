@@ -1,0 +1,37 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<h2 class="sublead"> Reviews </h2>
+{% endblock  %}
+
+{% block review %}
+<div class="container">
+<h4>{{ message }} A Review :</h4>
+
+<div  class="Ticket">
+          Ticket n°{{ticket.id}} - {{ticket.user}}
+            <h4> {{ticket.title}} </h4>
+        <p>
+            {{ticket.description}}
+        </p>
+        
+        <form method="POST" >
+         {% csrf_token %}
+            {{ review_form|crispy }}
+            <input class="btn" type="submit">
+        </form>
+  </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
