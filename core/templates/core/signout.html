@@ -2,15 +2,16 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<h2 class="sublead"> SignIn </h2>
+<h2 class="sublead"> Signout </h2>
 {% endblock  %}
 
-{% block signin %}
+{% block signout %}
 
     <form method="POST">
         {% csrf_token %}
         {{ form|crispy }}
-        <button type="submit" class="btn btn-primary">SignIn</button>
+        <button type="submit" class="btn btn-primary">SignOut</button>
+        <p> You are Disconnected ! </p>
     </form>
 
 {% endblock %}
