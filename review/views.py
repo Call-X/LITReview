@@ -1,22 +1,25 @@
 from datetime import datetime
-from email import message
-from hashlib import new
-
 from operator import attrgetter
-from django.http import HttpResponse
+from urllib import request
+from django.core.paginator import Paginator
+
+
 
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, TemplateView
 import datetime
 
 from django.contrib.auth.models import User
+
 from core.models import User
+import review
 
 from .forms import TicketForm, ReviewForm
 from .models import Review, Ticket
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.generic import ListView
+
 from .models import Ticket, Review
 
 
@@ -59,6 +62,20 @@ class TicketDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class TicketListView(LoginRequiredMixin, ListView):
     model = Ticket
 
+def flux_view(request):
+    
+#  user__in=request.user.following.all()
+    tickets = Ticket.objects.all()
+    for ticket in tickets:
+        ticket.is_closed = ticket.is_already_reviewed(request.user)
+    reviews = Review.objects.filter(user__in=request.user.following.all())
+    context = {
+                'tickets': tickets,
+                'reviews' : reviews  
+            }
+    return render(request, 'review/flux.html', context)
+
+
 def detail(request, ticket_id):
     ticket = get_object_or_404(Ticket, pk=ticket_id)
     context = {
@@ -74,7 +91,6 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
     
     template_name = "review/review_form.html"
     form_class = ReviewForm
-    form_class = TicketForm
     model = Review
 
     def form_valid(self, form):
@@ -122,7 +138,6 @@ def add_review(request, id_ticket=None):
             context = {
                 'ticket': ticket,
                 'review_form': review_form,
-                
             }
 
             return render(request, 'review/review_form.html', context)
@@ -130,8 +145,6 @@ def add_review(request, id_ticket=None):
         return redirect('ticket_list')
 
 
-
-    
 def subscription(request):
     followers = request.user.following.all()
     follow_list = []
@@ -155,12 +168,60 @@ def subscription(request):
         }
     return render(request, 'review/subscription_form.html', context)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# class FeedsView(LoginRequiredMixin, TemplateView):
     
+#     context_name = 'flux_news'
+#     view_type = 'flux'
 
+#     def get_flux_news(self):
+#         tickets = list(Ticket.objects.all())
+#         reviews = list(Review.objects.all())
+#         followed_users = [object.followed_user
+#                           for object in User.objects.all()
+#                           if object.following == self.request.user]
 
+#         tickets = [ticket for ticket in tickets
+#                    if (ticket.user in followed_users)
+#                    or (ticket.user == self.request.user)]
+#         reviews = [review for review in reviews
+#                    if ((review.user in followed_users)
+#                        or (review.user == self.request.user)
+#                        or (review.ticket.user in followed_users)
+#                        or (review.ticket.user == self.request.user))]
+#         feeds_news = tickets + reviews
+#         feeds_news.sort(key=attrgetter('time_created'), reverse=True)
+#         return feeds_news
+    
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         flux_news = self.get_flux_news()
 
+#         paginator = Paginator(flux_news, 5)
+#         page_number = self.request.GET.get('page')
+#         page_obj = paginator.get_page(page_number)
 
+#         context['page_obj'] = page_obj
+#         context['rating_range'] = Review.get_rating_range()
 
-
-
-
+#         return context

@@ -3,6 +3,8 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.conf import settings
 from django.db import models
 
+import review
+
 
 
 class Ticket(models.Model):
@@ -16,9 +18,14 @@ class Ticket(models.Model):
 
     def ___str___(self):
         return self.title
+    
 
-   
+    def is_already_reviewed(self, user):
+        if self.user == user:
+            return True
 
+        return Review.objects.filter(ticket=self, user=user).exists()
+        
 
 class Review(models.Model):
     ticket = models.ForeignKey(to=Ticket, on_delete=models.CASCADE)

@@ -1,11 +1,17 @@
-{% extends 'core/index.html' %}
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
 
+{% block content %}
+<h2 class="sublead"> Would You Please Follow The Register Form Here </h2>
+{% endblock  %}
 
 {% block register %}
 
-    <form action="POST">
+    <form method="POST">
         {% csrf_token %}
-        {{  form.as_p }}
+        {{  form|crispy }}
+        <button type="submit" class="btn btn-primary">Return</button>
+        <button type="submit" class="btn btn-primary">Register</button>
     </form>
 
 {% endblock  %}

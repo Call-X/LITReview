@@ -1,13 +1,16 @@
-{% extends 'core/index.html' %}
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
 
-
+{% block content %}
+<h2 class="sublead"> SignIn </h2>
+{% endblock  %}
 
 {% block signin %}
 
-    <form action="POST">
+    <form method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Login">
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">SignIn</button>
     </form>
 
 {% endblock %}
