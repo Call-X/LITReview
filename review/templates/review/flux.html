@@ -1,42 +1,42 @@
 {% extends 'core/base.html' %}
 {% load crispy_forms_tags %}
 
-
+{% block menu %}
+        <li><a href="{% url 'home' %}">HOME</a></li>
+        <li class="active"><a href="{% url 'flux' %}">FLUX</a></li>
+        <li><a href="{% url 'my_posts' %}">POSTS</a></li>
+        <li><a href="{% url 'subscription'%}">SUBSCRIPTION</a></li>
+        <li><a href="{% url 'users_register' %}">REGISTRATION</a></li>
+        <li><a class="btn" href="{% url 'signin' %}">SIGN IN </a></li>
+        <li><a class="btn" href="{% url 'signout' %}">SIGN OUT</a></li>
+{% endblock  %}
 
 {% block content %}
 <h2 class="sublead"> SEE YOUR FEEDS </h2>
-<a href="{% url 'create_ticket' %}" class="btn btn-primary">Ask for a Review</a>
-<a href="{% url 'create_review' %}"class="btn btn-primary">Create a Review</a>
+<a href="{% url 'create_ticket' %}" class="btn">Create a Ticket</a>
+<a href="{% url 'create_review' %}"class="btn">Create a Review</a>
 {% endblock  %}
 
-{% block ticket %}
-    
 
-    {% for ticket in tickets %}
-    <article>
-        {{ticket.title}}
-        {{ticket.is_closed}}
-        <a href="{% url 'add_review' id_ticket=ticket.id %}">Ticket Access</a>
 
-    </article>
-    {% empty %}
-    
-    <p>No ticket</p>
 
+{% block review %}
+    {% for review in results %}
+        {% if review.type == 'review' %}
+            <article style="background-color:rgb(224, 224, 224); border-radius: 20px; border:1px solid rgb(58, 54, 54)">
+                {% include 'review/review_display.html' %}
+                {% for ticket in results %}
+                    {% if ticket.type == 'ticket' and review.ticket_id == ticket.id %}
+                        <article style="background-color:rgb(207, 207, 207); border-radius: 20px; border:1px solid black">
+                            {% include 'review/ticket_display.html' %}
+                        </article>
+                    {% endif %}
+                {% endfor %}
+            </article>
+        {% endif %}
     {% endfor %}
+{% endblock %}
 
-    {% for review in reviews %}
-    <article>
-        {{review.title}}
-        
-
-    </article>
-    {% empty %}
-    
-    <p>No review</p>
-
-    {% endfor %}
-{% endblock  %}
 
 
 

@@ -1,6 +1,16 @@
 {% extends 'core/base.html' %}
 {% load crispy_forms_tags %}
 
+{% block menu %}
+        <li><a href="{% url 'home' %}">HOME</a></li>
+        <li><a href="{% url 'flux' %}">FLUX</a></li>
+        <li><a href="{% url 'create_ticket' %}">POSTS</a></li>
+        <li><a href="{% url 'subscription'%}">SUBSCRIPTION</a></li>
+        <li class="active"><a href="{% url 'users_register' %}">REGISTRATION</a></li>
+        <li><a class="btn" href="{% url 'signin' %}">SIGN IN </a></li>
+        <li><a class="btn" href="{% url 'signout' %}">SIGN OUT</a></li>
+{% endblock  %}
+
 {% block content %}
 <h2 class="sublead"> Would You Please Follow The Register Form Here </h2>
 {% endblock  %}

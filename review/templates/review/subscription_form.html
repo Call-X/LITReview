@@ -1,5 +1,16 @@
 {% extends 'core/base.html' %}
 {% load crispy_forms_tags %}
+
+{% block menu %}
+        <li><a href="{% url 'home' %}">HOME</a></li>
+        <li><a href="{% url 'flux' %}">FLUX</a></li>
+        <li><a href="{% url 'my_posts' %}">POSTS</a></li>
+        <li class="active"><a href="{% url 'subscription'%}">SUBSCRIPTION</a></li>
+        <li><a href="{% url 'users_register' %}">REGISTRATION</a></li>
+        <li><a class="btn" href="{% url 'signin' %}">SIGN IN </a></li>
+        <li><a class="btn" href="{% url 'signout' %}">SIGN OUT</a></li>
+{% endblock  %}
+
 {% block content %}
 
 <div class="subscriber">
@@ -22,7 +33,7 @@
     </form>
 </div>
 
-<div class="subscription">   
+<div class="subscriber">   
     <h3>Subscriptions</h3>            
     {% if followers %}
         {% for follows_user in followers %}
@@ -30,6 +41,7 @@
         <div class="list"><li class="user_list">{{ follows_user.username }}</li></div>
             <form method="post" action="{% url 'subscription' %}">
             {% csrf_token %}
+                {{ form|crispy }}
                 <button type="submit" class="btn btn-primary" name="delete" value="{{ follows_user.id }}">Delete</button>
             </form>
         </div>
@@ -39,15 +51,36 @@
     {% endif %}
 </div>
 
-<div class="mb-4">
-    <h3>Subscriber</h3>
-    {% if followed_by %}
-        {% for followed_by_user in followed_by %}
-        <li>{{ followed_by_user.username }}</li>
-        {% endfor %}
-    {% else %}
-        <li>No followers Follow you.</li>
-    {% endif %}                
+<div class="container">
+    <div class="subscriber">
+        <form method="post" action="{% url 'subscription' %}">
+            {% csrf_token %}
+
+            <div class="select_subscriber">    
+                    {% for followed_by in follow_list %}
+                    <option value="{{ user.followed_by.id }}">{{ user.followed_by.username}}</option>
+                    {% endfor %}
+                </select>            
+            </div>
+        </form>
+    </div>
+
+
+    <div class="subscriber"> 
+        <div class="mb-4">
+            <h3>Subscriber</h3>
+            {% if followed_by %}
+                {% for followed_by in follow_list %}
+
+                <div class="list"><li class="followed_by_user_list">{{ followed_by.username  }}</li></div>
+                    
+                
+                {% endfor %}
+            {% else %}
+                <li>No followers Follow you.</li>
+            {% endif %}                
+        </div>
+    </div>
 </div>
 
 {% endblock %}

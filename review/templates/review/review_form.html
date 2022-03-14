@@ -3,27 +3,56 @@
 
 
 {% block content %}
-<h2 class="sublead"> Reviews </h2>
+    <h2 class="sublead"> Create a Review </h2>
+
+    {% if ticket %}
+    <article>
+      {{ticket.title}}
+      <a href="{% url 'add_review' id_ticket=ticket.id %}">Ticket Access</a>
+    </article>
+    {% endif %}
+
+
+    {% if ticket == none %}
+      <fieldset class="mb-3">
+        <legend>Livre / Article</legend> 
+        {{ form_ticket|crispy }}
+      </fieldset>
+    
+      <fieldset  class="mb-3">
+        <legend>Critique</legend> 
+        {{ form_review|crispy }}
+      </fieldset>
+        Ticket n°{{ticket.title}} - {{ticket.user.id}}
+          <h4> {{ticket.title}} </h4>
+
+        <div class="select_ticket">    
+          <select class="form-select" name="ticket_title">
+              <option value="" selected>Select A ticket</option>
+              {% for ticket in object_list %}
+                <option value="{{ ticket.id }}">{{ ticket.title}}</option>
+              {% endfor %}
+          </select>            
+      </div>
+          
+      <p>
+          {{ticket.description}}
+      </p>
+      
+      <form method="POST" >
+        {% csrf_token %}
+          {{ review_form|crispy }}
+          <input class="btn" type="submit">
+      </form>
+    {% endif %}
+
 {% endblock  %}
 
-{% block review %}
-<div class="container">
-<h4>{{ message }} A Review :</h4>
 
-<div  class="Ticket">
-          Ticket n°{{ticket.id}} - {{ticket.user}}
-            <h4> {{ticket.title}} </h4>
-        <p>
-            {{ticket.description}}
-        </p>
-        
-        <form method="POST" >
-         {% csrf_token %}
-            {{ review_form|crispy }}
-            <input class="btn" type="submit">
-        </form>
-  </div>
-{% endblock %}
+
+
+
+
 
 
 

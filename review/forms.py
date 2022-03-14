@@ -33,25 +33,19 @@ class ReviewForm(forms.ModelForm):
             'rating',
             'body',
             'user',
-
+            
         ]
         exclude = ['user']
 
-        Widget = {
-            'body' : forms.Textarea(attrs={'col' : 40, 'rows' : 15})
-        }
         labels = {
             "headline": "Description",
             "rating": ("Note / 5"),
             "body": "Comments",
         }
+        
 
 
 
 
-class ParagraphErrorList(ErrorList):
-    def __str__(self):
-        return self.as_divs()
-    def as_divs(self):
-        if not self: return ''
-        return '<div class="errorlist">%s</div>' % ''.join(['<p class="small error">%s</p>' % e for e in self])
+
+

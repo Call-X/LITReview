@@ -1,25 +1,13 @@
 from datetime import datetime
-from operator import attrgetter
-from urllib import request
-from django.core.paginator import Paginator
-
-
-
-from django.shortcuts import get_object_or_404, render, redirect
+from django.db.models import Value, CharField
+from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.views.generic import ListView, TemplateView
-import datetime
-
 from django.contrib.auth.models import User
-
-from core.models import User
-import review
-
 from .forms import TicketForm, ReviewForm
 from .models import Review, Ticket
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-
+from django.core.exceptions import PermissionDenied
 from .models import Ticket, Review
 
 
@@ -33,117 +21,118 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
     success_url = reverse_lazy("home")
 
-
 class TicketUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    models = Ticket
-    fields = ['title', 'description', 'image']
-    template_name_suffix = '_update_form'
+    model = Ticket
+    template_name = 'review/ticket_update.html'
+    fields = [
+            'title',
+            'description',
+            'image',
+            'user',
+        ]
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         form.instance.time_created = datetime
         return super().form_valid(form)
-    
-    def test_func(self):
-        return self.request.user == self.get_object().user
 
+    def test_func(self):
+        post =self.get_object()
+        if self.request.user == post.user:
+            return True
+        raise PermissionDenied
 
 class TicketDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Ticket
     success_url = reverse_lazy('home')
 
     def test_func(self):
-        return self.request.user == self.get_object().user   
-
-    def get_queryset(self):
-        return Ticket.objects.order_by('id')
-
-
-class TicketListView(LoginRequiredMixin, ListView):
-    model = Ticket
+        post =self.get_object()
+        if self.request.user == post.user:
+            return True
+        raise PermissionDenied
 
 def flux_view(request):
-    
-#  user__in=request.user.following.all()
-    tickets = Ticket.objects.all()
+    tickets = Ticket.objects.filter(user__in=request.user.following.all()).annotate(type=Value('ticket', CharField())).union(Ticket.objects.filter(user=request.user).annotate(type=Value('ticket', CharField())))
     for ticket in tickets:
         ticket.is_closed = ticket.is_already_reviewed(request.user)
-    reviews = Review.objects.filter(user__in=request.user.following.all())
+
+    reviews = Review.objects.filter(user__in=request.user.following.all()).annotate(type=Value('review', CharField())).union(Review.objects.filter(user=request.user).annotate(type=Value('review', CharField())))
+    results = list(tickets) + list(reviews)
+    results.sort(key=lambda d: d.time_created, reverse=True)
+    for result in results:
+        print(result.__dict__)
     context = {
-                'tickets': tickets,
-                'reviews' : reviews  
+                'results': results
             }
     return render(request, 'review/flux.html', context)
 
+def my_post_view(request):
+    tickets = Ticket.objects.filter(user=request.user).annotate(type=Value('ticket', CharField())).union(Ticket.objects.filter(user=request.user).annotate(type=Value('ticket', CharField())))
+    for ticket in tickets:
+        ticket.is_closed = ticket.is_already_reviewed(request.user)
 
-def detail(request, ticket_id):
-    ticket = get_object_or_404(Ticket, pk=ticket_id)
+    reviews = Review.objects.filter(user=request.user).annotate(type=Value('review', CharField())).union(Review.objects.filter(user=request.user).annotate(type=Value('review', CharField())))
+    results = list(tickets) + list(reviews)
+    results.sort(key=lambda d: d.time_created)
+
     context = {
-        'ticket_title': ticket.title,
-        'ticket_id': id,
-        'thumbnail': ticket.image
-    }
-
-    return render(request,'review/ticket_card.html', context)
-
+                'results': results
+            }
+    return render(request, 'review/my_posts.html', context)
 
 class ReviewCreateView(LoginRequiredMixin, CreateView):
-    
-    template_name = "review/review_form.html"
+    template_name = "review/review_form_without_ticket.html"
     form_class = ReviewForm
     model = Review
+    success_url = reverse_lazy("home")
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        form.instance.ticket = Ticket.objects.get(id=self.kwargs['id_ticket'])
         return super().form_valid(form)
-    success_url = reverse_lazy("home")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ticket'] = Ticket.objects.get(id=self.kwargs['id_ticket'])
+        return context
 
-class ReviewUpdate(UpdateView):
+class ReviewUpdateView(UpdateView):
   model = Review
+  template_name = 'review/review_update.html'
+  fields = [
+            "headline",
+            "rating",
+            "body",
+        ]
 
-class ReviewDelete(DeleteView):
+class ReviewDeleteView(DeleteView):
   model = Review
+  template_name = 'review/review_confirm_delete.html'
   success_url = reverse_lazy('home')
 
-
-def add_review(request, id_ticket=None):
-
-    if id_ticket is not None:
-        ticket = get_object_or_404(Ticket, pk=id_ticket)
-        review = Review.objects.filter(ticket=ticket, user=request.user).exists()
-        if review:
-            return redirect('ticket_list')
-    else:
-        return redirect('ticket_list')
-
-
-    if request.method == "GET":
-            review_form = ReviewForm()
-            context = {
-                'ticket': ticket,
-                'review_form': review_form,   
-            }
-            return render(request, 'review/review_form.html', context)
-
-    elif request.method == 'POST':
+def create_review_and_create_ticket(request):
+    review_form = ReviewForm() 
+    ticket_form = TicketForm()
+  
+    if request.method == 'POST':
+        ticket_form = TicketForm(request.POST)
         review_form = ReviewForm(request.POST)
-        review_form.instance.user = request.user
-        review_form.instance.ticket = ticket
-
-        if review_form.is_valid():
-
+        if review_form.is_valid() and ticket_form.is_valid():
+            ticket_form.instance.user = request.user
+            review_form.instance.user = request.user
+            ticket = ticket_form.save()
+            review_form.instance.ticket = ticket
             review_form.save()
-            return redirect('ticket_list')
+            return redirect('home') 
         else:
-            context = {
-                'ticket': ticket,
-                'review_form': review_form,
-            }
+            print(review_form)
 
-            return render(request, 'review/review_form.html', context)
-    else:
-        return redirect('ticket_list')
-
+    context = {
+        'review_form': review_form,
+        'ticket_form': ticket_form,
+    }
+    return render(request,'review/edit_review.html', context=context)
 
 def subscription(request):
     followers = request.user.following.all()
@@ -167,61 +156,3 @@ def subscription(request):
             'followed_by': request.user.followed_by(),
         }
     return render(request, 'review/subscription_form.html', context)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# class FeedsView(LoginRequiredMixin, TemplateView):
-    
-#     context_name = 'flux_news'
-#     view_type = 'flux'
-
-#     def get_flux_news(self):
-#         tickets = list(Ticket.objects.all())
-#         reviews = list(Review.objects.all())
-#         followed_users = [object.followed_user
-#                           for object in User.objects.all()
-#                           if object.following == self.request.user]
-
-#         tickets = [ticket for ticket in tickets
-#                    if (ticket.user in followed_users)
-#                    or (ticket.user == self.request.user)]
-#         reviews = [review for review in reviews
-#                    if ((review.user in followed_users)
-#                        or (review.user == self.request.user)
-#                        or (review.ticket.user in followed_users)
-#                        or (review.ticket.user == self.request.user))]
-#         feeds_news = tickets + reviews
-#         feeds_news.sort(key=attrgetter('time_created'), reverse=True)
-#         return feeds_news
-    
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         flux_news = self.get_flux_news()
-
-#         paginator = Paginator(flux_news, 5)
-#         page_number = self.request.GET.get('page')
-#         page_obj = paginator.get_page(page_number)
-
-#         context['page_obj'] = page_obj
-#         context['rating_range'] = Review.get_rating_range()
-
-#         return context
