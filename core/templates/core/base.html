@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport"    content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+
+<!-- 	<link rel="shortcut icon" href="static/css/assets/logo.png"> -->
+	
+	<link rel="stylesheet" media="screen" href="/static/css/assets/background.jpg">
+	<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/static/css/font-awesome.min.css">
+
+	<!-- Custom styles for our template -->
+	<link rel="stylesheet" href="/static/css/bootstrap-theme.css" media="screen" >
+	<link rel="stylesheet" href="/static/css/main.css">
+</head>
+
+<body class="home">
+	
+	<!-- Fixed navbar -->
+	<div class="navbar navbar-inverse navbar-fixed-top headroom" >
+		<div class="container">
+			<div class="navbar-header">
+				<!-- Button for smallest screens -->
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+				<a class="navbar-brand" href="base.html"><img src="/static/css/assets/logo.png" alt=""></a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav pull-right"> {% block menu %}
+					<li class="active"><a href="{% url 'home' %}">HOME</a></li>
+					<li><a href="{% url 'flux' %}">FLUX</a></li>
+					<li><a href="{% url 'my_posts' %}">POSTS</a></li>
+					<li><a href="{% url 'subscription'%}">SUBSCRIPTION</a></li>
+					<li><a href="{% url 'users_register' %}">REGISTRATION</a></li>
+					<li><a class="btn" href="{% url 'signin' %}">SIGN IN </a></li>
+					<li><a class="btn" href="{% url 'signout' %}">SIGN OUT</a></li>
+					{% endblock  %}
+				</ul>
+			</div><!--/.nav-collapse -->
+		</div>
+	</div> 
+	<!-- /.navbar -->
+
+	<!-- Header -->
+	<header id="head">
+		<div class="container">
+			<div class="row">
+				{% block title %}
+				<h1 class="lead">WELCOME ON LITReview </h1>
+				{% endblock %}
+				<div class="box">
+					
+				</div>
+			</div>
+		</div>
+				
+	</header>
+	<!-- /Header -->
+
+	<!-- Intro -->
+	<div class="container text-center">
+		<br> <br>
+		{% block content %}
+		<h2 class="sublead">THE BEST PLACE TO POST REVIEWS ON THE BEST BOOKS EVER</h2>
+		{% endblock %}
+		{% block signin %}{% endblock %}
+		{% block signout %}{% endblock %}
+		{% block register %}{% endblock register %}
+		{% block ticket %}{% endblock ticket %}
+		{% block review %}{% endblock review %}
+		
+		
+	</div>
+	<!-- /Intro-->
+
+		<div class="row">
+			<div class="col-sm-6">
+				<h3></h3>
+				<p>
+				
+				</p>
+			</div>
+			<div class="col-sm-6">
+			</div>
+		</div> <!-- /row -->
+
+		<div class="jumbotron top-space">
+
+  		</div>
+
+</div>	<!-- /container -->
+
+		<div class="footer2">
+			<div class="container">
+				<div class="row">
+					
+					<div class="col-md-6 widget">
+						<div class="widget-body">
+							<p class="simplenav">
+								<a href="#">Home</a> 
+								<a href="about.html">About</a> 
+								<a href="contact.html">Contact</a> 
+								<b><a href="register.html">Registration</a></b>
+							</p>
+						</div>
+					</div>
+
+				</div> <!-- /row of widgets -->
+			</div>
+		</div>
+		
+	</footer>	
+	
+</body>
+</html>
