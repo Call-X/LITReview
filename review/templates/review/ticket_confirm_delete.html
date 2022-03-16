@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+{% include 'review/ticket_display.html'%}
+{% block ticket %}
+
+{% endblock %}
+
+
+    <div class="ticket-body">
+        <h5 class="ticket-title">Do you confirm to delete this ticket ?</h5>
+        
+        <form method="post">{% csrf_token %} 
+            <div class="container-button-del">
+                <button type="submit" class="secondary-btn">Confirm</button>
+            </div>
+        </form>
+    </div>
+
+
+
+{% endblock %}
+

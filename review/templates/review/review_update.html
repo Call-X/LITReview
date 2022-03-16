@@ -1,0 +1,22 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row align-items_center">
+        {% include 'review/ticket_display.html' with ticket=review.ticket %}
+        
+        <h5 class="ticket-update">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <div class="container-button-updt">
+                    <button type="submit" class="secondary-btn">Confirm</button>
+                </div>
+            </form>
+    </div>
+</div>
+
+{% endblock %}
+

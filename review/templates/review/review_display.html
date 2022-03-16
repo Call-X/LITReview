@@ -1,0 +1,21 @@
+<div class="Review">
+    <p class="review-header">
+        answer from - <strong>{{review.user}}</strong>
+    </p>
+    <p class="time-review">
+        {{review.time_created|date:'d F Y'}}:{{review.time_created|time:"h:i a"}}
+    </p>
+
+    <p class="review-headline">
+        {% for i in rating_range %}
+            {% if i < review.rating %}★
+            {% else %}☆
+            {% endif %}
+        {% endfor %}
+        {{review.headline}}-{{review.rating_range}}
+        <p class="review-description">
+            {{ review.body }} {{ review.description }}
+        </p>
+    </p>
+    
+</div>

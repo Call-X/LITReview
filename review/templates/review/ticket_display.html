@@ -1,0 +1,39 @@
+{% block ticket_display %}
+
+
+    <div class="Ticket">
+        {% if ticket.review %}
+            {% include "review/review_display.html" %}
+        {% endif %}
+        <p class="ticket-header">
+            Ticket n°{{ticket.id}} - {{ ticket.title }}
+        </p>
+        <p class="ticket-infos">
+            <bold>{{ticket.user}}</bold> 
+        </p>
+        <p class="time-ticket">
+            {{ticket.time_created|date:'d F Y'}}:{{ticket.time_created|time:'h:i a'}}
+        </p>
+        
+        <p class="ticket-description">
+            {{ticket.description}}
+        </p>
+            
+        {% if ticket.image %}
+            <img src="{{ ticket.image.url }}" alt="Image" class="img-thumbnail"> 
+        {% endif %}
+    </div>
+
+        {% if not ticket.completed  %}
+            <div class="container-button-add">
+                <a href="{% url 'add_review' id_ticket=ticket.id %}" class="secondary-btn">Add a review</a>
+            </div>
+        {% endif %}
+ 
+{% endblock %}
+        
+
+
+
+
+
