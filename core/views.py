@@ -3,15 +3,16 @@ from django.contrib.auth import login, authenticate
 from .forms import LoginForm, UserCreationForm
 from django.shortcuts import redirect, render
 from django.views.generic.edit import FormView, CreateView
-""" from django.contrib.auth.views import LoginView, LogoutView """
+
 from django.views.generic import View
 from django.urls import reverse_lazy
-""" from django.contrib.auth.mixins import LoginRequiredMixin """
+
 from core import forms
 
 
+
 class HomeView(FormView):
-    
+
 
     template_name = "core/base.html"
     form_class = LoginForm
@@ -48,3 +49,8 @@ class LoginView( View):
 
 class LogoutView(View):
     template_name = 'core/base.html'
+
+
+
+def error_404(request, exception):
+    return render(request,'core/404.html')

@@ -76,23 +76,21 @@
 	.btn-default.active { color:#333; -webkit-box-shadow:inset 0px 0px 0px 3px #333; -moz-box-shadow:inset 0px 0px 0px 3px #333; box-shadow:inset 0px 0px 0px 3px #333; background: transparent; }
 	
 .btn-action,
-.btn-primary { color:#FFEFD7; background-image: -webkit-linear-gradient(top, #FF9B22 0%, #FF8C00 100%); background-image: linear-gradient(to bottom, #FF9B22 0%, #FF8C00 100%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffFF9B22', endColorstr='#ffFF8C00', GradientType=0); filter: progid:DXImageTransform.Microsoft.gradient(enabled = false); background-repeat: repeat-x; border:0 none; }
+.btn-primary { background-color:#ffffff;
+}
+
 	.btn-action:hover,
-	.btn-action:focus { color:#fff; background: #FF9B22; }
-	.btn-action:active {	background: #FF8C00; }
-
-
-/*******************************/
-/*           Jumbotron         */
-/*******************************/
-.jumbotron { color: inherit; background-color: #F7F5F4; padding-top:30px; padding-bottom:30px; margin-bottom:0; }
-.container .jumbotron { -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; padding-left:40px; padding-right:40px; }
-	.jumbotron p { font-size:inherit; }
-	.jumbotron h2, .jumbotron h3, .jumbotron h4, 
-	.jumbotron h5, .jumbotron h6 { line-height: 1.3em; }
-
+	.btn-action:focus { color:rgb(143, 142, 142); background: #6d6c6c; }
+	.btn-action:active {	background: #999896; }
 
 /*******************************/
 /*           Images            */
 /*******************************/
 .img-rounded { -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; }
+
+.btn{
+	background-color: #0000003f;
+}
+
+
+

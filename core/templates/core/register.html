@@ -1,15 +1,23 @@
 {% extends 'core/base.html' %}
 {% load crispy_forms_tags %}
 
-{% block menu %}
+<div class="navbar-collapse">
+    <ul class="nav navbar-nav pull-right">
+        {% block menu %}
         <li><a href="{% url 'home' %}">HOME</a></li>
         <li><a href="{% url 'flux' %}">FLUX</a></li>
-        <li><a href="{% url 'create_ticket' %}">POSTS</a></li>
+        <li><a href="{% url 'my_posts' %}">POSTS</a></li>
         <li><a href="{% url 'subscription'%}">SUBSCRIPTION</a></li>
         <li class="active"><a href="{% url 'users_register' %}">REGISTRATION</a></li>
-        <li><a class="btn" href="{% url 'signin' %}">SIGN IN </a></li>
+        {% if user.is_authenticated %}
         <li><a class="btn" href="{% url 'signout' %}">SIGN OUT</a></li>
-{% endblock  %}
+        <li><span class="navbar-username">{{user.username}} - Welcome on your session - </span></li>
+        {% else %}
+        <li><a class="secondary-btn" href="{% url 'signin' %}">SIGN IN </a></li>
+        {% endif %}
+        {% endblock  %}
+    </ul>
+</div>
 
 {% block content %}
 <h2 class="sublead"> Would You Please Follow The Register Form Here </h2>
@@ -20,8 +28,10 @@
     <form method="POST">
         {% csrf_token %}
         {{  form|crispy }}
-        <button type="submit" class="btn btn-primary">Return</button>
-        <button type="submit" class="btn btn-primary">Register</button>
+        <div class="container-button-reg">
+            <a href="{% url 'home' %}" button type="submit" class="button-sub">-Return-</a>
+            <button type="submit" class="button-sub">Register</button>
+        </div>
     </form>
 
 {% endblock  %}

@@ -44,11 +44,12 @@ class Review(models.Model):
     def __str__(self):
         return self.headline
 
-    def get_absolute_url(self):
-        return reverse('flux')
-
     @classmethod
     def get_rating_range(cls):
         return range(5)
 
+    def get_absolute_url(self):
+        return reverse('flux')
+
+    
 

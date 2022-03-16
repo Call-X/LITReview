@@ -1,0 +1,51 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+
+<div class="navbar-collapse">
+    <ul class="nav navbar-nav pull-right">
+        <div class="container-button-sign">
+            {% block menu %}
+            <li><a href="{% url 'home' %}">HOME</a></li>
+            <li><a href="{% url 'flux' %}">FLUX</a></li>
+            <li class="active"><a href="{% url 'my_posts' %}">POSTS</a></li>
+            <li><a href="{% url 'subscription'%}">SUBSCRIPTION</a></li>
+            <li><a href="{% url 'users_register' %}">REGISTRATION</a></li>
+            {% if user.is_authenticated %}
+            <li><a class="btn" href="{% url 'signout' %}">SIGN OUT</a></li>
+            <li><span class="navbar-username">{{user.username}} - Welcome on your session - </span></li>
+            {% else %}
+            <li><a class="btn" href="{% url 'signin' %}">SIGN IN </a></li>
+            {% endif %}
+            {% endblock  %}
+        </div>
+    </ul>
+</div>
+
+
+{% block content %}
+<h2 class="sublead"> SEE YOUR POSTS </h2>
+{% endblock  %}
+
+
+
+
+{% block review %}
+    {% for review in results %}
+        {% if review.type == 'review' %}
+            <article class="review-article">
+                {% include 'review/my_posts_review.html' %}
+                {% for ticket in results %}
+                    {% if ticket.type == 'ticket' and review.ticket_id == ticket.id %}
+                        <article class="ticket-article">
+                            {% include 'review/my_posts_ticket.html' %}
+                        </article>
+                    {% endif %}
+                {% endfor %}
+            </article>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+
+
+

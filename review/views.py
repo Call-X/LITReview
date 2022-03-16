@@ -9,6 +9,8 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
 from .models import Ticket, Review
+from core.models import User
+from django.contrib.auth.decorators import login_required
 
 
 class TicketCreateView(LoginRequiredMixin, CreateView):
@@ -52,6 +54,7 @@ class TicketDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         raise PermissionDenied
 
+@login_required(login_url='home')
 def flux_view(request):
     tickets = Ticket.objects.filter(user__in=request.user.following.all()).annotate(type=Value('ticket', CharField())).union(Ticket.objects.filter(user=request.user).annotate(type=Value('ticket', CharField())))
     for ticket in tickets:
@@ -63,10 +66,12 @@ def flux_view(request):
     for result in results:
         print(result.__dict__)
     context = {
-                'results': results
+                'results': results,
+                'rating_range' : Review.get_rating_range,
             }
     return render(request, 'review/flux.html', context)
 
+@login_required(login_url='home')
 def my_post_view(request):
     tickets = Ticket.objects.filter(user=request.user).annotate(type=Value('ticket', CharField())).union(Ticket.objects.filter(user=request.user).annotate(type=Value('ticket', CharField())))
     for ticket in tickets:
@@ -75,9 +80,10 @@ def my_post_view(request):
     reviews = Review.objects.filter(user=request.user).annotate(type=Value('review', CharField())).union(Review.objects.filter(user=request.user).annotate(type=Value('review', CharField())))
     results = list(tickets) + list(reviews)
     results.sort(key=lambda d: d.time_created)
-
+    
     context = {
-                'results': results
+                'results': results,
+                'rating_range' : Review.get_rating_range,
             }
     return render(request, 'review/my_posts.html', context)
 
@@ -133,7 +139,8 @@ def create_review_and_create_ticket(request):
         'ticket_form': ticket_form,
     }
     return render(request,'review/edit_review.html', context=context)
-
+    
+@login_required(login_url='home')
 def subscription(request):
     followers = request.user.following.all()
     follow_list = []

@@ -1,20 +1,34 @@
 {% extends 'core/base.html' %}
 {% load crispy_forms_tags %}
 
-{% block menu %}
-        <li><a href="{% url 'home' %}">HOME</a></li>
-        <li class="active"><a href="{% url 'flux' %}">FLUX</a></li>
-        <li><a href="{% url 'my_posts' %}">POSTS</a></li>
-        <li><a href="{% url 'subscription'%}">SUBSCRIPTION</a></li>
-        <li><a href="{% url 'users_register' %}">REGISTRATION</a></li>
-        <li><a class="btn" href="{% url 'signin' %}">SIGN IN </a></li>
-        <li><a class="btn" href="{% url 'signout' %}">SIGN OUT</a></li>
-{% endblock  %}
+
+<div class="navbar-collapse">
+    <ul class="nav navbar-nav pull-right">
+        <div class="container-button-sign">
+            {% block menu %}
+                <li><a href="{% url 'home' %}">HOME</a></li>
+                <li class="active"><a href="{% url 'flux' %}">FLUX</a></li>
+                <li><a href="{% url 'my_posts' %}">POSTS</a></li>
+                <li><a href="{% url 'subscription'%}">SUBSCRIPTION</a></li>
+                <li><a href="{% url 'users_register' %}">REGISTRATION</a></li>
+                {% if user.is_authenticated %}
+                <li><a class="btn" href="{% url 'signout' %}">SIGN OUT</a></li>
+                <li><span class="navbar-username">{{user.username}} - Welcome on your session - </span></li>
+                {% else %}
+                <li><a class="btn" href="{% url 'signin' %}">SIGN IN </a></li>
+                {% endif %}
+            {% endblock  %}
+        </div>
+    </ul>
+</div>
+
 
 {% block content %}
-<h2 class="sublead"> SEE YOUR FEEDS </h2>
-<a href="{% url 'create_ticket' %}" class="btn">Create a Ticket</a>
-<a href="{% url 'create_review' %}"class="btn">Create a Review</a>
+    <h2 class="sublead"> SEE YOUR FEEDS </h2>
+    <div class="container-button-feeds">
+        <a href="{% url 'create_ticket' %}" class="primary-btn">Create a Ticket</a>
+        <a href="{% url 'create_review' %}"class="primary-btn">Create a Review</a>
+    </div>
 {% endblock  %}
 
 
@@ -23,11 +37,11 @@
 {% block review %}
     {% for review in results %}
         {% if review.type == 'review' %}
-            <article style="background-color:rgb(224, 224, 224); border-radius: 20px; border:1px solid rgb(58, 54, 54)">
+            <article class="review-article">
                 {% include 'review/review_display.html' %}
                 {% for ticket in results %}
                     {% if ticket.type == 'ticket' and review.ticket_id == ticket.id %}
-                        <article style="background-color:rgb(207, 207, 207); border-radius: 20px; border:1px solid black">
+                        <article class="ticket-article">
                             {% include 'review/ticket_display.html' %}
                         </article>
                     {% endif %}

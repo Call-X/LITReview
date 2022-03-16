@@ -1,0 +1,17 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+
+
+
+{% block content %}
+    <h2>Create a review</h2>
+    <form method="POST">
+        {{ ticket_form|crispy }}
+        {{ review_form|crispy }}
+        {% csrf_token %}
+        <div class="container-button-create">
+            <button type="submit" class="secondary-btn">add a review</button>
+        </div>
+    </form>
+{% endblock content %}
+

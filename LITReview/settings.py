@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-2(8ftwk#&td0eyhmzw^9^&3yyn--0i(^_vj)it-s-7dxvp1t*i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -59,7 +59,7 @@ ROOT_URLCONF = 'LITReview.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],   
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],   
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
