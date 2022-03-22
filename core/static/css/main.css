@@ -2,14 +2,14 @@
 /* Header */
 #head { background:#181015 url( assets/background.jpg) no-repeat; background-size: cover; size: 100%; text-align: center; padding-top:240px; color:white; font-family:"Open sans", Helvetica, Arial; font-weight:300; }
 #head.secondary { height:100px; min-height: 100px; padding-top:0px; }
-	#head .lead { font-family:"Open sans", Helvetica, Arial; font-size:44px; margin-bottom:6px; color:white; line-height:1.15em; } 
+	#head .lead { font-family:"Open sans", Helvetica, Arial; font-size:44px; margin-bottom:6px; color:white; line-height:1.15em; }
 	#head .tagline { color:rgba(255,255,255,0.75); margin-bottom:25px; }
-		#head .tagline a { color:#fff; } 
+		#head .tagline a { color:#fff; }
 	#head .btn { margin-bottom:10px;}
 	#head .btn-default { text-shadow: none; background:transparent; color:rgb(3, 3, 3); -webkit-box-shadow:inset 0px 0px 0px 3px rgba(255,255,255,.5); -moz-box-shadow:inset 0px 0px 0px 3px rgba(255,255,255,.5); box-shadow:inset 0px 0px 0px 3px rgba(255,255,255,.5); background: transparent; }
 		#head .btn-default:hover,
 		#head .btn-default:focus { color:rgba(255,255,255,.8); -webkit-box-shadow:inset 0px 0px 0px 3px rgba(255,255,255,.8); -moz-box-shadow:inset 0px 0px 0px 3px rgba(255,255,255,.8); box-shadow:inset 0px 0px 0px 3px rgba(255,255,255,.8); background: transparent; }
-		#head .btn-default:active, 
+		#head .btn-default:active,
 		#head .btn-default.active { color:#fff; -webkit-box-shadow:inset 0px 0px 0px 3px #fff; -moz-box-shadow:inset 0px 0px 0px 3px #fff; box-shadow:inset 0px 0px 0px 3px #fff; background: transparent; }
 
 @media (max-width: 767px) {
@@ -26,8 +26,20 @@
 
 
 /* Typography */
+@media only screen and (min-device-width : 320px) and (max-device-width : 767px){
+	h1{
+		position: absolute;
+		font-size: 20px;
+		font-weight: bold;
+		color: white;
+		top: 355px;
+		left: 80px;
+	}
+
+}
+
 h1, h2, h3, h4, h5, h6 { font-family: 'Syne Mono', monospace; }
-h1, .h1, h2, .h2, h3, .h3 { margin-top:30px; } 
+h1, .h1, h2, .h2, h3, .h3 { margin-top:30px; }
 blockquote {font-family: Georgia; color:rgb(255, 5, 5); margin:30px 0 30px; }
 label { color: rgb(10, 10, 10); }
 .thin { font-weight:300; }
@@ -38,7 +50,7 @@ ul.list-spaces li{ margin-bottom:10px; }
 
 /* Helpers */
 .container-full { margin: 0 auto; width: 100%; }
-.top-space { margin-top: 60px; }
+.top-space { margin-top: 200px; }
 .top-margin { margin-top:20px; }
 
 img { max-width: 30%;
@@ -47,11 +59,18 @@ img { max-width: 30%;
 	top: -15px;
 }
 
+@media only screen and (min-device-width : 320px) and (max-device-width : 767px) {
+	.logo img {max-width: 10%;
+		position: absolute;
+		left: 30px;
+		top: 55px;
+	}
+}
 
 /* Sidebars */
 .sidebar { padding-top:36px; padding-bottom:30px; }
 	.sidebar .widget { margin-bottom:20px; }
-	.sidebar h1, .sidebar .h1, .sidebar h2, .sidebar .h2, .sidebar h3, .sidebar .h3 { margin-top:20px; } 
+	.sidebar h1, .sidebar .h1, .sidebar h2, .sidebar .h2, .sidebar h3, .sidebar .h3 { margin-top:20px; }
 
 
 .ticket-header {
@@ -74,7 +93,7 @@ img { max-width: 30%;
 	padding: 1.5rem;
 	color: rgb(0, 0, 0);
 }
-	  
+
 .img-thumbnail {
 	position: relative;
 	left: -5px;
@@ -103,7 +122,7 @@ img { max-width: 30%;
 	margin: 2rem;
 	border-radius: 10px;
 }
-  
+
 .Review {
 	display: flex;
 	flex-direction: column;
@@ -190,23 +209,23 @@ img { max-width: 30%;
 }
 
 .review-article {
-	background-color:rgb(255, 255, 255); 
-	border-radius: 20px; 
+	background-color:rgb(255, 255, 255);
+	border-radius: 20px;
 	border:1px solid rgb(0, 0, 0);
 	margin: 3rem;
 }
 
 .ticket-article {
 	background-color:rgb(255, 255, 255);
-	 border-radius: 20px; 
+	 border-radius: 20px;
 	 margin: 10px;
-	
+
 	}
 
 .btn-action {
 	background-color:rgba(0, 0, 0, 0.151);
 
-} 
+}
 
 .button-sub{
 	font-family: 'Syne Mono', monospace;
@@ -228,16 +247,17 @@ img { max-width: 30%;
 	font-family: 'Syne Mono', monospace;
 	font-weight: bold;
 	position: relative;
-	top: -70px;
-	right: 475px;
 	color: white;
 	font-size: 2rem;
+	display: block;
 
 }
 
 .navbar-collapse{
+	
 	position: relative;
 	left: 150px;
+	
 }
 
 .container-button-add, .container-button-reg, .container-button-sign, .container-button-add,
@@ -245,6 +265,20 @@ img { max-width: 30%;
 .container-button-updt {
 	display: flex;
 	justify-content: center;
+	flex-wrap: wrap;
 }
+
+.down-banner{
+	background-color:  rgba(17, 107, 5, 0.5);
+}
+
+a {
+	margin-left: 5px;
+	color: black;
+	font-family: 'Syne Mono', monospace;
+	font-weight: bold;
+	
+}
+
 
 

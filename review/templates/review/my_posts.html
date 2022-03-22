@@ -1,6 +1,11 @@
 {% extends 'core/base.html' %}
 {% load crispy_forms_tags %}
 
+
+{% if user.is_authenticated %}
+<span class="navbar-username">{{user.username}} Welcome on your session </span>
+{% else %}
+{% endif %}
 <div class="navbar-collapse">
     <ul class="nav navbar-nav pull-right">
         <div class="container-button-sign">
@@ -12,7 +17,6 @@
             <li><a href="{% url 'users_register' %}">REGISTRATION</a></li>
             {% if user.is_authenticated %}
             <li><a class="btn" href="{% url 'signout' %}">SIGN OUT</a></li>
-            <li><span class="navbar-username">{{user.username}} - Welcome on your session - </span></li>
             {% else %}
             <li><a class="btn" href="{% url 'signin' %}">SIGN IN </a></li>
             {% endif %}

@@ -20,11 +20,11 @@ $ git clone https://github.com/Call-X/LITReview.git
 
 3. Create a virtual environnement with :
 ``` 
-python -m venv env
+python -m venv projectenv
 ```
 3. Activate the virtual environment with
 ``` 
-source env/bin/activate
+projectenv/Srcipts/activate
 ``` 
 4. install the project with its dependencies with :
 ``` 
