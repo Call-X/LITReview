@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 
 {% if user.is_authenticated %}
-<span class="navbar-username">{{user.username}} Welcome on your session </span>
+<span class="navbar-username">-{{user.username}} Welcome on your session- </span>
 {% else %}
 {% endif %}
 <div class="navbar-collapse">

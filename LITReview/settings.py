@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
-from distutils.command.config import config
+
 import os
 from pathlib import Path
 from dotenv import load_dotenv

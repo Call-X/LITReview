@@ -16,4 +16,9 @@
     <p class="review-description">
         {{ review.body }} {{ review.description }}
     </p>
+    {% if review.user == user %}
+    <div class="container-button-my-posts">
+        <a href="{% url 'review_delete' review.pk %}" class="secondary-btn"> Delete </a>
+    </div>
+    {% endif %} 
 </div>

@@ -27,25 +27,18 @@ class LoginView(View):
     def get(self, request):
         form = self.form_class()
         message = ""
-        return render(
-            request, self.template_name, context={"form": form, "message": message}
-        )
+        return render(request, self.template_name, context={"form": form, "message": message})
 
     def post(self, request):
         if request.methode == "POST":
             form = forms.LoginForm(request.POST)
             if form.is_valid():
-                user = authenticate(
-                    username=form.cleaned_data["username"],
-                    passeword=form.cleaned_data["passeword"],
-                )
+                user = authenticate(username=form.cleaned_data["username"],passeword=form.cleaned_data["passeword"])
                 if user is not None:
                     login(request, user)
                     return redirect("home")
             message = "Identification invalid."
-            return render(
-                request, self.template_name, context={"form": form, "message": message}
-            )
+            return render(request, self.template_name, context={"form": form, "message": message})
 
 
 class LogoutView(View):

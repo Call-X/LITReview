@@ -37,7 +37,7 @@ class TicketUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        form.instance.time_created = datetime
+        form.instance.time_created = datetime.now()
         return super().form_valid(form)
 
     def test_func(self):
@@ -60,27 +60,11 @@ class TicketDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 @login_required(login_url="home")
 def flux_view(request):
-    tickets = (
-        Ticket.objects.filter(user__in=request.user.following.all())
-        .annotate(type=Value("ticket", CharField()))
-        .union(
-            Ticket.objects.filter(user=request.user).annotate(
-                type=Value("ticket", CharField())
-            )
-        )
-    )
+    tickets = (Ticket.objects.filter(user__in=request.user.following.all()).annotate(type=Value("ticket", CharField())).union(Ticket.objects.filter(user=request.user).annotate(type=Value("ticket", CharField()))))
     for ticket in tickets:
         ticket.is_closed = ticket.is_already_reviewed(request.user)
 
-    reviews = (
-        Review.objects.filter(user__in=request.user.following.all())
-        .annotate(type=Value("review", CharField()))
-        .union(
-            Review.objects.filter(user=request.user).annotate(
-                type=Value("review", CharField())
-            )
-        )
-    )
+    reviews = (Review.objects.filter(user__in=request.user.following.all()).annotate(type=Value("review", CharField())).union(Review.objects.filter(user=request.user).annotate(type=Value("review", CharField()))))
     results = list(tickets) + list(reviews)
     results.sort(key=lambda d: d.time_created, reverse=True)
     for result in results:
@@ -94,27 +78,11 @@ def flux_view(request):
 
 @login_required(login_url="home")
 def my_post_view(request):
-    tickets = (
-        Ticket.objects.filter(user=request.user)
-        .annotate(type=Value("ticket", CharField()))
-        .union(
-            Ticket.objects.filter(user=request.user).annotate(
-                type=Value("ticket", CharField())
-            )
-        )
-    )
+    tickets = (Ticket.objects.filter(user=request.user).annotate(type=Value("ticket", CharField())).union(Ticket.objects.filter(user=request.user).annotate(type=Value("ticket", CharField()))))
     for ticket in tickets:
         ticket.is_closed = ticket.is_already_reviewed(request.user)
 
-    reviews = (
-        Review.objects.filter(user=request.user)
-        .annotate(type=Value("review", CharField()))
-        .union(
-            Review.objects.filter(user=request.user).annotate(
-                type=Value("review", CharField())
-            )
-        )
-    )
+    reviews = Review.objects.filter(user=request.user).annotate(type=Value("review", CharField())).union(Review.objects.filter(user=request.user).annotate(type=Value("review", CharField())))
     results = list(tickets) + list(reviews)
     results.sort(key=lambda d: d.time_created)
 
