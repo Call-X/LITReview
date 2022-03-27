@@ -30,9 +30,6 @@
 <h2 class="sublead"> SEE YOUR POSTS </h2>
 {% endblock  %}
 
-
-
-
 {% block review %}
     {% for review in results %}
         {% if review.type == 'review' %}
@@ -49,6 +46,22 @@
         {% endif %}
     {% endfor %}
 {% endblock %}
+
+{% block ticket %}
+    {% for ticket in results %}
+        {% if ticket.type == 'ticket' and request.user == ticket.user %}
+                {% include "review/my_posts_ticket.html" %}
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+
+
+
+
+
+
+    
 
 
 

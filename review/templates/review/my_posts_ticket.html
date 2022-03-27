@@ -1,6 +1,5 @@
 {% block ticket_display %}
 
-
         <div class="Ticket">
             {% if ticket.review %}
                 {% include "review/review_display.html" %}
@@ -31,10 +30,6 @@
                     <a href="{% url 'ticket_delete' ticket.pk %}" class="secondary-btn"> Delete </a>
                 </div>
             {% endif %} 
+
 {% endblock %}
-        
-
-
-
-
 

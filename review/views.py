@@ -84,7 +84,7 @@ def my_post_view(request):
 
     reviews = Review.objects.filter(user=request.user).annotate(type=Value("review", CharField())).union(Review.objects.filter(user=request.user).annotate(type=Value("review", CharField())))
     results = list(tickets) + list(reviews)
-    results.sort(key=lambda d: d.time_created)
+    results.sort(key=lambda d: d.time_created, reverse=True)
 
     context = {
         "results": results,
